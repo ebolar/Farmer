@@ -38,4 +38,15 @@ export FARM_CONFIG=$FARM_HOME/config/config.yaml
 
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
 
+## Configuring commands
+
+### Setting Context
+
+### Using Farmer Primitives
+
+### Defining new commands
+
 ## To Do
+* Nice to be able to run this under Windows.  Currently running this from WSL.
+* Code does not conform to the Open/Closed principle - how to do this with Bash?
+* GoLang implementation might make it easier to port to other platforms and provide richer features such as intelligent load balancing.
