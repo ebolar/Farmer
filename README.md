@@ -1,5 +1,5 @@
 # Farmer
-> A simple, lightweight, general purpose solution for working with server farms.
+> A lightweight, general purpose solution for working with server farms.
 
 ## Introduction
 A large number of solutions exist for working with large collections of servers.  These generally address specific needs such as clustered application deployment (application servers), workload management (containerisation, batch processing) or high performance computing (Hadoop, MPI).  
@@ -18,7 +18,6 @@ In my case I am using a cluster of Raspberry Pi servers as an experimentation wo
 2. **Leverage standard distributed computing tools.**   ***Farmer*** makes use of ssh for remote access.
 3. **Configurable.**  The server farm is configured through a yaml file. 
 4. **Extensible command line interface.**  It should be possible to construct your own commands using ***Farmer***.
-5. **Good CS practices.** The code should be readable, understandable and maintainable.  The code includes automated tests.  It should be relatively easy to extend the tool, for example to leverage cloud CLI's.
 
 ## Dependencies
 * Requires Bash V4 or above.
