@@ -8,20 +8,19 @@ A large number of solutions exist for working with large collections of servers.
 * Developing, testing or supporting large applications which do not fit within the footprint of a single workstation.
 * Offloading long running tasks such as application builds, or tasks requiring large datasets to a more suitable server.
 * Providing shared access to specialised infrastructure.
-* Or any other situation where you need to treat a small group of servers as a single distributed computer solution.  
 
+Or any other situation where you need to treat a small group of servers as a single distributed computer solution.  
 In my case I am using a cluster of Raspberry Pi servers as an experimentation workbench.
 
-***Farmer*** has been designed with a number of considerations in mind.
+***Farmer*** has been designed to allow you to start small and build out the environment to meet your needs.  ***Farmer***:  
 
-1. **Simple Agent-less installation.** ***Farmer*** should be installed on the master node only.  
-2. **Leverage standard distributed computing tools.**   ***Farmer*** makes use of ssh for remote access.
-3. **Configurable.**  The server farm is configured through a yaml file. 
-4. **Extensible command line interface.**  It should be possible to construct your own commands using ***Farmer***.
+1. Provides a **simple installation** that makes it easy to kick the tires.  
+2. Leverages **standard distributed computing tools**.  The minimum requirement is ssh access to other members of the server farm, under the local username.  The Networked sharing of resources is used to provide seamless integration for remotely running processes.
+3. Has a **flexible configuration** that supports grouping and classification of servers for different purposes.
+4. Has an **extensible command line interface** that allows you to construct your own distributed commands.
 
 ## Dependencies
 * Requires Bash V4 or above.
-* A working **ssh** connection to other members of the server farm, under the local username.  
 
 ## Installation
 1. Download the Farm software to a location on your workstation.
@@ -48,4 +47,3 @@ $FARM_HOME/Shell/Commands contains a few pre-defined commands that show differen
 ## To Do
 * Nice to be able to run this under Windows.  Currently running this from WSL.
 * Code does not conform to the Open/Closed principle - how to do this with Bash?
-* GoLang implementation might make it easier to port to other platforms and provide richer features such as intelligent load balancing.
