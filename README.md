@@ -4,7 +4,7 @@
 ## Introduction
 A large number of solutions exist for working with large collections of servers.  These generally address specific needs such as clustered application deployment (application servers), workload management (containerisation, batch processing) or high performance computing (Hadoop, MPI).  
 
-***Farmer*** provides a simplified command line solution for working with groups of servers.  This can be useful in any situation where you need to treat a small group of servers as a single distributed computer solution.  For example:  
+***Farmer*** provides a simplified command line solution for working with small groups of servers, allowing you to treat them as a single distributed computer solution.  For example:  
 * Developing, testing or supporting large applications which do not fit within the footprint of a single workstation.
 * Offloading long running tasks such as application builds, or tasks requiring large datasets to a more suitable server.
 * Providing shared access to specialised infrastructure.
