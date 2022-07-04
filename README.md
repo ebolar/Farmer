@@ -11,6 +11,7 @@ A server farm is a small group of servers that operate as a single distributed c
 
 ***Farmer*** provides a simplified command line solution for working with server farms.  It is designed to allow you to start small and build out the environment to meet your needs.
 
+```
  -------------
 | Workstation | 
  -------------    ----------------
@@ -20,6 +21,7 @@ A server farm is a small group of servers that operate as a single distributed c
        |          ----------------
        |-------> | Server group n |
                   ----------------
+```
 
 ## Kicking the tires
 ***Farmer*** provides a **simple installation** that makes it easy to kick the tires.  
