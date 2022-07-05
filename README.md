@@ -2,21 +2,43 @@
 > A lightweight, general purpose solution for working with server farms.
 
 ## Introduction
-Many solutions exist for working with large collections of servers.  These address specific needs such as clustered application deployment (application servers), workload management (containerisation, batch processing) or high performance computing (Hadoop, MPI).  
+Many solutions exist for working with large collections of servers.  These solutions typically address specific needs such as clustered application deployment (application servers), workload management (containerisation, batch processing) or high performance computing (Hadoop, MPI).  
 
-A server farm is a small group of servers that operate as a single distributed computer solution.  Server farms can be useful in a variety of ways such as:  
+At the other end of the spectrum, a server farm is a small group of servers that operate as a single distributed computer solution.  Server farms can be useful in a variety of ways such as:  
 * Developing, testing or supporting large applications which do not fit within the footprint of a single workstation.
 * Offloading long running tasks such as application builds, or tasks requiring large datasets to more suitable servers.
 * Providing shared access to specialised infrastructure.
 * Building thin client solutions.
 
-* ***Farmer*** provides a simplified command line solution for working with server farms.  
-It has:
+Software that makes it easy to work with small server farms is under represented.  ***Farmer*** fills that gap by providing a simplified command line solution for working with server farms.  It has:
 * a **simple installation** that makes it easy to kick the tires.
-* an **extensible command line interface** that allows you to directly use Farm primitives or to construct your own distributed commands.
+* an **extensible command line interface** that allows you to directly use Farm primitives, or to construct your own distributed commands.
+* a **flexible configuration** that allows you to group servers by function.
 
 ***Farmer*** is designed to allow you to start small and build out the environment to meet your needs.
 
+## A simple installation
+The minimum requirement is a Linux based environment running Bash V4.0 or above with ssh access to the other servers in the farm.  The Windows Subsystem for Linux works fine.
+
+1. Download the Farm software to a location on your workstation, for example /opt/Farmer.
+2. Add the following to your .bashrc file.
+```
+export FARM_HOME=/opt/Farmer
+export FARM_CONFIG=$FARM_HOME/config/config.yaml
+. $FARM_HOME/Shell/Commands
+```
+3. Update the config.yaml file with the names and group information for your farm.
+4. Logout and back in, or ```. ~./bashrc``` access the farm configuration.
+5. Configure SSH access to the servers on your farm.  For example:
+```
+# Generate a key pair
+$ ssh-keygen -t ecdsa -b 521
+
+# Copy it to all servers in the farm.  
+$ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
+```
+
+## Kicking the tires
 ```
  -------------
 | Workstation | 
@@ -28,20 +50,6 @@ It has:
        |-------> | Server group n |
                   ----------------
 ```
-
-## Kicking the tires
-The minimum requirement is a Linux based environment running Bash V4.0 or above with ssh access to the other servers in the farm.  The Windows Subsystem for Linux works fine.
-
-### Installation
-1. Download the Farm software to a location on your workstation, for example /opt/Farmer.
-2. Add the following to your .bashrc file.
-```
-export FARM_HOME=/opt/Farmer
-export FARM_CONFIG=$FARM_HOME/config/config.yaml
-. $FARM_HOME/Shell/Commands
-```
-3. Update the config.yaml file with the names and group information for your farm.
-4. Logout and back in.
 
 You can test that it is working with a few commands.  
 ```
@@ -55,20 +63,12 @@ $ Farm.ForAll -a echo SERVER
 $ Farm.ForAll -a -f $FARM_HOME/Shell/showServer
 ```
 
-5. Configure SSH access to the servers on your farm.  For example:
-```
-# Generate a key pair
-$ ssh-keygen -t ecdsa -b 521
-
-# Copy it to all servers in the farm.  
-$ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
-```
-
 6. Test out access to the farm.  The following command should run uptime on all servers on the farm.
 ```
 # A simple test
 $ fuptime -a
 ```
+
 
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
 
