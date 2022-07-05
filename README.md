@@ -55,9 +55,13 @@ $ Farm.ForAll -a -f $FARM_HOME/Shell/showServer
 
 5. Configure SSH access to the servers on your farm.
 ```
+# Generate a key pair
 $ ssh-keygen -t ecdsa -b 521
-$ ssh-copy-id -i .ssh/id_ecdsa pidp11
+
+# Copy it to all servers in the farm.  
 $ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
+
+# A simple test
 $ fuptime -a
 ```
 
