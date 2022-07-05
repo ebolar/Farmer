@@ -26,7 +26,7 @@ A server farm is a small group of servers that operate as a single distributed c
 ## Kicking the tires
 ***Farmer*** provides a **simple installation** that makes it easy to kick the tires.  
 
-The minimum requirement is a Linux based environment running Bash V4.0 or above with access to the other servers in the farm.  The Windows Subsystem for Linux works fine.
+The minimum requirement is a Linux based environment running Bash V4.0 or above with ssh access to the other servers in the farm.  The Windows Subsystem for Linux works fine.
 
 ### Installation
 1. Download the Farm software to a location on your workstation, for example /opt/Farmer.
@@ -38,7 +38,26 @@ export FARM_CONFIG=$FARM_HOME/config/config.yaml
 ```
 3. Update the config.yaml file with the names and group information for your farm.
 4. Logout and back in.
+
+You can test that it is working with a few commands.  
+```
+# Parse and then print out the configuration
+$ TestConfiguration
+
+# List the names of all servers in the farm
+$ Farm.ForAll -a echo SERVER
+
+# Check that all servers are network accessible
+$ Farm.ForAll -a -f $FARM_HOME/Shell/showServer
+```
+
+
+
 5. Configure SSH access to the servers on your farm.
+```
+$ ssh-keygen
+$ 
+```
 
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
 
