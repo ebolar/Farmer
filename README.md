@@ -55,8 +55,10 @@ $ Farm.ForAll -a -f $FARM_HOME/Shell/showServer
 
 5. Configure SSH access to the servers on your farm.
 ```
-$ ssh-keygen
-$ 
+$ ssh-keygen -t ecdsa -b 521
+$ ssh-copy-id -i .ssh/id_ecdsa pidp11
+$ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
+$ fuptime -a
 ```
 
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
