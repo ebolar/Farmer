@@ -69,15 +69,12 @@ $ Farm.ForAll -a -f $FARM_HOME/Shell/showServer
 $ fuptime -a
 ```
 
-
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
 
-## Configuring commands
+## Customising your environment
 
 ### Setting Context
-
 ### Using Farmer Primitives
-
 ### Defining new commands
 
 ## To Do
