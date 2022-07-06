@@ -28,34 +28,36 @@ export FARM_CONFIG=$FARM_HOME/config/config.yaml
 . $FARM_HOME/Shell/Commands
 ```
 3. Update the config.yaml file with the names and group information for your farm.
-4. ```$ source ~./bashrc``` to load the farm configuration.
+4. Execute ```source ~./bashrc``` to load the farm configuration.
 5. You can test that it is working with a few commands.  
 ```
 # Parse and then print out the configuration
-$ TestConfiguration
+TestConfiguration
 
 # List the names of all servers in the farm
-$ Farm.ForAll -a echo SERVER
+Farm.ForAll -a echo SERVER
 
 # Check that all servers are network accessible
-$ Farm.ForAll -a -f $FARM_HOME/Shell/showServer
+Farm.ForAll -a -f $FARM_HOME/Shell/showServer
 ```
-6. Configure SSH access to the servers on your farm.  For example:
+6. Finally configure SSH access to the servers on your farm.  For example:
 ```
 # Generate a key pair
-$ ssh-keygen -t ecdsa -b 521
+ssh-keygen -t ecdsa -b 521
 
 # Copy it to all servers in the farm.  
-$ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
+Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
 ```
-
-## Kicking the tires
-
 6. Test out access to the farm.  The following command should run uptime on all servers on the farm.
 ```
 # A simple test
 $ fuptime -a
 ```
+
+## Kicking the tires
+Now that you have a working installation you can run a few commands.  
+
+
 
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
 
