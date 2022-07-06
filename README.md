@@ -28,7 +28,7 @@ export FARM_CONFIG=$FARM_HOME/config/config.yaml
 . $FARM_HOME/Shell/Commands
 ```
 3. Update the config.yaml file with the names and group information for your farm.
-4. Logout and back in, or ```. ~./bashrc``` load the farm configuration.
+4. ```$ source ~./bashrc``` to load the farm configuration.
 5. Configure SSH access to the servers on your farm.  For example:
 ```
 # Generate a key pair
