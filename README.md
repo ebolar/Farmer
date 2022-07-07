@@ -10,7 +10,7 @@ At the other end of the spectrum, a server farm is a small group of servers that
 * Providing shared access to specialised infrastructure.
 * Building thin client solutions.
 
-Software that makes it easy to work with small server farms is under represented.  ***Farmer*** fills that gap by providing a simplified command line solution for working with server farms.  It has:
+Software that makes it easy to work with groups of servers is under represented.  ***Farmer*** fills that gap by providing a simplified command line solution for working with server farms.  It has:
 * a **simple installation** that makes it easy to kick the tires.
 * an **extensible command line interface** that allows you to directly use Farm primitives, or to construct your own distributed commands.
 * a **flexible configuration** that allows you to group servers by function.
@@ -50,14 +50,83 @@ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
 ```
 6. Test out access to the farm.  The following command should run uptime on all servers on the farm.
 ```
-# A simple test
-$ fuptime -a
+fuptime -a
 ```
 
 ## Kicking the tires
-Now that you have a working installation you can run a few commands.  
+Now that you have a working installation you can run a few commands.  We have already used a few of them during the installation process.
+
+```
+farm:
+  name: Example
+  description: A simple example farm
+  network: eth0
+  transport: ssh
+  server-list:
+  - server:
+      name: localhost
+      network: lo
+      transport: local
+      group:
+        - master
+        - dotnet
+- server:
+      name: server1
+      group:
+        - worker
+        - dotnet
+- server:
+      name: server2
+      group:
+        - worker
+        - dotnet
+```
+
+There are four basic commands for operating with the server farm
+
+```
+# Run a command on all servers in a server group, eg uptime
+Farm.OnAll -a uptime
 
 
+
+**Farm.OnAll** runs a command on all servers in a server group
+**Farm.OnOne** runs a command on one server in a server group
+**Farm.ForAll** runs a command on the local server, substituting SERVER in the command with each of the server names in a server group.
+**Farm.ForAll** runs a command on the local server, substituting SERVER in the command with one of the server names in a server group.
+```
+
+
+
+
+
+
+
+
+
+Usage: [Context] Farm.ForOne [Switches] [Commands]
+
+Context:
+  FUNCTION=<function name>
+  SERVER=<server name>
+  SERVER_GROUP=<server group name>
+  SERVER_LIST=<list of server names>
+
+Switches:
+  -h | -a | -s <server name> | -g <group> | -l <list of servers>
+
+Commands:
+  <list of commands>
+  -f <list of files>
+
+Notes:
+  -h prints this help message
+  -a sets SERVER_GROUP=<farmname> and SERVER_LIST=<all servers>
+  -g sets SERVER_LIST=<groupList>
+  -l sets SERVER_GROUP="" and SERVER_LIST=<list of servers>
+  -s sets SERVER_GROUP="" and SERVER_LIST=<server name>
+  -f read commands from <list of files>
+  NETWORK and TRANSPORT are derived from the configuration
 
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
 
