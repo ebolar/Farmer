@@ -4,18 +4,18 @@
 ## Introduction
 Many solutions exist for working with large collections of servers.  These solutions typically address specific needs such as clustered application deployment (application servers), workload management (containerisation, batch processing) or high performance computing (Hadoop, MPI).  
 
-At the other end of the spectrum, a server farm is a small group of servers that operate as a single distributed computer solution.  Server farms can be useful in a variety of ways such as:  
-* Developing, testing or supporting large applications which do not fit within the footprint of a single workstation.
+At the other end of the spectrum there are many situations where you need to manage a small number of servers that operate as a single distributed computer solution, sometimes referred to as a server farm.  Server farms can be useful in a large variety of ways such as:  
+* Developing, testing or supporting distributed applications which do not fit within the footprint of a single workstation.  For example full stack development of web or mobile applications, or development and testing of HPC applications.
 * Offloading long running tasks such as application builds, or tasks requiring large datasets to more suitable servers.
 * Providing shared access to specialised infrastructure.
-* Building thin client solutions.
+* Building thin client solutions where applications are run remotely from the workstation.
 
 Software that makes it easy to work with groups of servers is under represented.  ***Farmer*** fills that gap by providing a simplified command line solution for working with server farms.  It has:
-* a **simple installation** that makes it easy to kick the tires.
+* a **simple installation** that makes it easy to **kick the tires**.
 * an **extensible command line interface** that allows you to directly use Farm primitives, or to construct your own distributed commands.
 * a **flexible configuration** that allows you to group servers by function.
 
-***Farmer*** is designed to allow you to start small and build out the environment to meet your needs.
+> ***Farmer*** is designed to allow you to start small and build out the environment to meet your needs.
 
 ## A simple installation
 The minimum requirement is a Linux based environment running Bash V4.0 or above with ssh access to the other servers in the farm.  The Windows Subsystem for Linux works fine.
@@ -40,7 +40,7 @@ Farm.ForAll -a echo SERVER
 # Check that all servers are network accessible
 Farm.ForAll -a -f $FARM_HOME/Shell/showServer
 ```
-6. Finally configure SSH access to the servers on your farm.  For example:
+6. Finally configure SSH access to the servers on your farm.  ***Farmer*** currently assumes you will login under the same username on all servers.  Create the accounts on all servers and then set up SSH as per your security policies.  For example, to configure login using ECC based public keys:
 ```
 # Generate a key pair
 ssh-keygen -t ecdsa -b 521
@@ -56,6 +56,16 @@ fuptime -a
 ## Kicking the tires
 Now that you have a working installation you can run a few commands.  We have already used a few of them during the installation process.
 
+The examples below assume the following configuration, typical for a web based application.
+
+>.-------------.      .--------------------.      .-----------------.
+>| Workstation | ---> | Application server | ---> | Database server |
+>'-------------'  |   '--------------------'  |   '-----------------'
+>                 |                           |
+>                 |   .--------------------.  |
+>                 \-> | Application server | -/
+>                     '--------------------'
+
 ```
 farm:
   name: Example
@@ -68,28 +78,23 @@ farm:
       network: lo
       transport: local
       group:
-        - master
-        - dotnet
+        - Sandpit
 - server:
       name: server1
       group:
-        - worker
-        - dotnet
+        - MyApplication
 - server:
       name: server2
       group:
-        - worker
-        - dotnet
+        - MyApplication
+- server:
+      name: server3
+      group:
+        - DB
 ```
 
 There are four basic commands for operating with the server farm
-
 ```
-# Run a command on all servers in a server group, eg uptime
-Farm.OnAll -a uptime
-
-
-
 **Farm.OnAll** runs a command on all servers in a server group
 **Farm.OnOne** runs a command on one server in a server group
 **Farm.ForAll** runs a command on the local server, substituting SERVER in the command with each of the server names in a server group.
