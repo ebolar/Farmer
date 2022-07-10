@@ -58,13 +58,15 @@ Now that you have a working installation you can run a few commands.  We have al
 
 The examples below assume the following configuration, typical for a web based application.
 
->.-------------.      .--------------------.      .-----------------.
->| Workstation | ---> | Application server | ---> | Database server |
->'-------------'  |   '--------------------'  |   '-----------------'
->                 |                           |
->                 |   .--------------------.  |
->                 \-> | Application server | -/
->                     '--------------------'
+```
+.-------------.      .--------------------.      .-----------------.
+| Workstation | ---> | Application server | ---> | Database server |
+'-------------'  |   '--------------------'  |   '-----------------'
+                 |                           |
+                 |   .--------------------.  |
+                 \-> | Application server | -/
+                     '--------------------'
+```
 
 ```
 farm:
