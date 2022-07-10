@@ -1,13 +1,14 @@
 # Farmer
+> 
 > A lightweight, general purpose solution for working with server farms.
+> 
 
 ## Introduction
 Many solutions exist for working with large collections of servers.  These solutions typically address specific needs such as clustered application deployment (application servers), workload management (containerisation, batch processing) or high performance computing (Hadoop, MPI).  
 
-At the other end of the spectrum there are many situations where you need to manage a small number of servers that operate as a single distributed computer solution, sometimes referred to as a server farm.  Server farms can be useful in a large variety of ways such as:  
+At the other end of the spectrum there are many situations where you need to operate a small collection of servers as a single distributed computer solution.  These are sometimes referred to as server farms.  Server farms can be encountered in a number of situations:  
 * Developing, testing or supporting distributed applications which do not fit within the footprint of a single workstation.  For example full stack development of web or mobile applications, or development and testing of HPC applications.
-* Offloading long running tasks such as application builds, or tasks requiring large datasets to more suitable servers.
-* Providing shared access to specialised infrastructure.
+* Offloading long running tasks such as application builds, or tasks requiring large datasets to more suitable servers.  Offloading tasks to specialised infrastructure is another example.
 * Building thin client solutions where applications are run remotely from the workstation.
 
 Software that makes it easy to work with groups of servers is under represented.  ***Farmer*** fills that gap by providing a simplified command line solution for working with server farms.  It has:
@@ -15,7 +16,9 @@ Software that makes it easy to work with groups of servers is under represented.
 * an **extensible command line interface** that allows you to directly use Farm primitives, or to construct your own distributed commands.
 * a **flexible configuration** that allows you to group servers by function.
 
+> 
 > ***Farmer*** is designed to allow you to start small and build out the environment to meet your needs.
+> 
 
 ## A simple installation
 The minimum requirement is a Linux based environment running Bash V4.0 or above with ssh access to the other servers in the farm.  The Windows Subsystem for Linux works fine.
@@ -27,7 +30,7 @@ export FARM_HOME=/opt/Farmer
 export FARM_CONFIG=$FARM_HOME/config/config.yaml
 . $FARM_HOME/Shell/Commands
 ```
-3. Update the config.yaml file with the names and group information for your farm.
+3. Update the config.yaml file with the names and group information for your farm.  See the **kick the tires** section below if you need some guidance on how to do this.
 4. Execute ```source ~./bashrc``` to load the farm configuration.
 5. You can test that it is working with a few commands.  
 ```
