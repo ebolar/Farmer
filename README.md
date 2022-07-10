@@ -99,12 +99,17 @@ farm:
 ```
 
 There are four basic commands for operating with the server farm
-```
-**Farm.OnAll** runs a command on all servers in a server group
-**Farm.OnOne** runs a command on one server in a server group
+
+**Farm.OnAll** runs a command on all servers in a server group.  
+To check *nginx* is running you could use ```Farm.OnAll -g MyApplication ps -ax | grep nginx```.
+
+**Farm.OnOne** runs a command on one server in a server group.  
+To connect to *postgres* on the database server you could use ```Farm.OnOne -g DB -m SESSION psql```.
+
 **Farm.ForAll** runs a command on the local server, substituting SERVER in the command with each of the server names in a server group.
-**Farm.ForAll** runs a command on the local server, substituting SERVER in the command with one of the server names in a server group.
-```
+This is useful when you want to repeat a command locally for each server in a group.  For ee to copy updated static web content 
+
+**Farm.ForOne** runs a command on the local server, substituting SERVER in the command with one of the server names in a server group.
 
 
 
@@ -150,11 +155,9 @@ $FARM_HOME/Shell/Commands contains a few pre-defined commands that show differen
 * Nice to be able to run this under Windows.  Currently running this from WSL.
 * Code does not conform to the Open/Closed principle - how to do this with Bash?
 * Commands.InPath.  Check if the required commands are in the PATH, eg ifconfig, ...
+* ShowServers() generates a list of all servers in a particular group.
+* ShowGroups() generates a list of groups configured on the farm.
+* The ability to set the remote username for a server in the configuration, or at the command line.
+* Transports for cloud CLI's (eg AWS, Azure, Google).  Should allow you to connect to either a VM or Container as if it is a standalone server.
 
-***Farmer*** has been designed to allow you to start small and build out the environment to meet your needs.  ***Farmer***:  
-
-1. Provides a **simple installation** that makes it easy to kick the tires.  
-2. Leverages **standard distributed computing tools**.  The minimum requirement is ssh access to other members of the server farm, under the local username.  The Networked sharing of resources is used to provide seamless integration for remotely running processes.
-3. Has a **flexible configuration** that supports grouping and classification of servers for different purposes.
-4. Has an **extensible command line interface** that allows you to construct your own distributed commands.
-
+2. Leverages **standard distributed computing tools** so that you can configure your environment as you need it.  The minimum requirement is ssh access to other members of the server farm, under the local username.  The Networked sharing of resources is used to provide seamless integration for remotely running processes.
