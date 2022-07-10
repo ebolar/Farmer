@@ -107,7 +107,7 @@ To check *nginx* is running you could use ```Farm.OnAll -g MyApplication ps -ax 
 To connect to *postgres* on the database server you could use ```Farm.OnOne -g DB -m SESSION psql```.
 
 **Farm.ForAll** runs a command on the local server, substituting SERVER in the command with each of the server names in a server group.
-This is useful when you want to repeat a command locally for each server in a group.  For ee to copy updated static web content 
+This is useful when you want to repeat a command locally for each server in a group.  For example, to copy updated web content to *nginx* you could use ```Farm.ForAll -g MyApplication rcp -R https SERVER:/var/www/html```
 
 **Farm.ForOne** runs a command on the local server, substituting SERVER in the command with one of the server names in a server group.
 
