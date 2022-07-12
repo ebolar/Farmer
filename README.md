@@ -1,7 +1,5 @@
 # Farmer
-> 
-> A lightweight, general purpose solution for working with server farms.
-> 
+> A lightweight, general purpose solution for working with server farms. 
 
 ## Introduction
 Many solutions exist for working with large collections of servers.  These solutions typically address specific needs such as clustered application deployment (application servers), workload management (containerisation, batch processing) or high performance computing (Hadoop, MPI).  
@@ -16,9 +14,7 @@ Software that makes it easy to work with groups of servers is under represented.
 * an **extensible command line interface** that allows you to directly use Farm primitives, or to construct your own distributed commands.
 * a **flexible configuration** that allows you to group servers by function.
 
-> 
 > ***Farmer*** is designed to allow you to start small and build out the environment to meet your needs.
-> 
 
 ## A simple installation
 The minimum requirement is a Linux based environment running Bash V4.0 or above with ssh access to the other servers in the farm.  The Windows Subsystem for Linux works fine.
@@ -30,7 +26,7 @@ export FARM_HOME=/opt/Farmer
 export FARM_CONFIG=$FARM_HOME/config/config.yaml
 . $FARM_HOME/Shell/Commands
 ```
-3. Update the config.yaml file with the names and group information for your farm.  See the **kick the tires** section below if you need some guidance on how to do this.
+3. Update the config.yaml file with the names and group information for your farm.  See the **An example configuration** section below for a simple starting configuration.
 4. Execute ```source ~./bashrc``` to load the farm configuration.
 5. You can test that it is working with a few commands.  
 ```
@@ -56,9 +52,7 @@ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
 fuptime -a
 ```
 
-## Kicking the tires
-Now that you have a working installation you can run a few commands.  We have already used a few of them during the installation process.
-
+## An example configuration
 The examples below assume the following configuration, typical for a web based application.
 
 ```
@@ -71,6 +65,7 @@ The examples below assume the following configuration, typical for a web based a
                      '--------------------'
 ```
 
+**config.yaml**
 ```
 farm:
   name: Example
@@ -97,24 +92,63 @@ farm:
       group:
         - DB
 ```
+## Kicking the tires
+Now that you have a working installation you can run a few commands.  We have already used a few of them during the installation process.
 
 There are four basic commands for operating with the server farm
 
-**Farm.OnAll** runs a command on all servers in a server group.  
-To check *nginx* is running you could use ```Farm.OnAll -g MyApplication ps -ax | grep nginx```.
+**Farm.OnAll** runs a command on all servers in a server group.  To check *nginx* is running you could use 
+> Farm.OnAll -g MyApplication ps -ax | grep nginx
 
-**Farm.OnOne** runs a command on one server in a server group.  
-To connect to *postgres* on the database server you could use ```Farm.OnOne -g DB -m SESSION psql```.
+**Farm.OnOne** runs a command on one server in a server group.  To connect to *postgres* on the database server you could use 
+> Farm.OnOne -g DB -m SESSION psql
 
-**Farm.ForAll** runs a command on the local server, substituting SERVER in the command with each of the server names in a server group.
-This is useful when you want to repeat a command locally for each server in a group.  For example, to copy updated web content to *nginx* you could use ```Farm.ForAll -g MyApplication rcp -R https SERVER:/var/www/html```
+**Farm.ForAll** runs a command on the local server, substituting SERVER in the command with each of the server names in a server group.  This is useful when you want to repeat a command locally for each server in a group.  For example, to copy updated web content to the *nginx* servers you could use 
+> Farm.ForAll -g MyApplication rcp -R https SERVER:/var/www/html
 
-**Farm.ForOne** runs a command on the local server, substituting SERVER in the command with one of the server names in a server group.
+**Farm.ForOne** runs a command on the local server, substituting SERVER in the command with one of the server names in a server group.  
 
+The previous examples all execute a single command on the remote server.  To execute more than one command you can pass a script.  
 
+For example, with following **updateConfig** script:
+```
+#!/bin/bash
+# ========================================================
+# updateNginxConfig
+# ========================================================
+# Update the nginx configuration and restart the server
 
+echo -e "${GREEN}=== SERVER ===${NC}"
+rcp ~/Build/nginx.conf SERVER:/etc/nginx/
+ssh SERVER sudo service nginx restart
+```
+you can load a new configuration with the command 
+> Farm.ForAll -g MyApplication -f updateNginxConfig
 
+Similarly, with:
+```
+#!/bin/bash
+# ========================================================
+# getserverinfo
+# ========================================================
+# V1.0 - bash / ssh based implementation
+#
+# Report the sheduling characteristics for a server
+#
 
+echo ========================================================
+echo "Session         : "`whoami`@`hostname`
+grep Model /proc/cpuinfo | uniq
+grep "model name" /proc/cpuinfo | uniq
+grep -i bogomips /proc/cpuinfo | uniq
+grep MemFree /proc/meminfo
+grep MemAvailable /proc/meminfo
+grep -i swap /proc/meminfo
+```
+you can check the configuration of all servers in the farm with the command 
+> Farm.OnAll -a -f getServerInfo
+
+## Getting under the hood
 
 
 
