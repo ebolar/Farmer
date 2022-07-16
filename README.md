@@ -197,7 +197,7 @@ All **Farm.xxx** commands have the same syntax
 | :----: | :----------------- | :----------------- |
 | -h | Prints the help message. |  |
 | -a | Selects all servers in the farm. | SERVER_GROUP=\<farmname\>, SERVER_LIST=\<all servers\> |
-| -g | Selects all servers in a group. | SERVER_LIST=\<groupList\> |
+| -g | Selects all servers in a group. | SERVER_GROUP=\<groupname\>, SERVER_LIST=\<grouplist\> |
 | -l | Selects an arbitrary list of servers. | SERVER_GROUP=\"\", SERVER_LIST=\<list of servers\> |
 | -f | Reads commands from \<list of files\> | |
 | -m | Execute a COMMAND, or start an interactive SESSION. | |
