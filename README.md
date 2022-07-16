@@ -223,6 +223,7 @@ The **Farm.GetActiveServers** and **Farm.SelectActiveServer** commands update th
 The full list of context variables are:
 | Context | Purpose |
 | :------ | :------ |
+| COMMAND | The command to be executed |
 | SERVER | The selected server. |
 | SERVER_GROUP | The name of the group of servers that have been selected. |
 | SERVER_LIST | The list of servers selected. |
@@ -235,16 +236,49 @@ The full list of context variables are:
 | SELECTION_ALGORITHM | Algorithm used to select the server from the ACTIVE_SERVERS list.  Currently only support RANDOM selection. |
 
 ### Extending the CLI
-***Farmer*** commands can be used to create additional 
+***Farmer*** commands can be used to create additional farm aware commands.  A number of these have been addded to the $FARM_HOME/Shell/Commands script.
 
+For example, the **fuptime** command used to check the intial configuration of the farm is defined as:
+```
+function fuptime ()
+{
+  FUNCTION=$FUNCNAME
+  SetContext "$@" || return $?
 
-These are useful  
+  Farm.OnAll uptime
+}
+```
+
+A set of custom farm commands can be constructed using this approach.  
+
+For example, the previous examples for updating the Nginx configuration used a fixed location to source the file.  A more robust command might be:
+
+```
+function fupdateNginxConfig ()
+{
+  FUNCTION=$FUNCNAME
+  SetContext "$@" || return $?
+
+  if [ -z "$COMMAND" ]
+  then
+    echo -e "${RED}Error: No config file selected${NC}" >&2
+    echo -e "${GREEN}Usage: fupdateNginxConfig [switches] configfile ${NC}" >&2
+    return 1
+  fi
   
-$FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
+  Farm.ForAll rcp $COMMAND SERVER:/etc/nginx
+  Farm.OnAll sudo service nginx restart
+}
+```
 
-## Customising your environment
+This allows you to push an arbitrary configuration file with the command ```fupdateNginxConfig -g AppSvr ./nginx.conf```.
 
 ## Command reference
+The full list of ***Farmer*** commands is
+
+| Command | Description |
+| ------- | :---------- |
+| | |
 
 ## To Do
 * Nice to be able to run this under Windows.  Currently running this from WSL.
