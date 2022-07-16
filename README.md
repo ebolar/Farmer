@@ -52,8 +52,8 @@ Farm.ForAll -a ssh-copy-id -i .ssh/id_ecdsa SERVER
 fuptime -a
 ```
 
-## An example configuration
-The examples below assume the following configuration, typical for a web based application.
+## An flexible configuration
+The examples below are based around the following configuration.
 
 ```
 .-------------.      .--------------------.      .-----------------.
@@ -69,6 +69,15 @@ The examples below assume the following configuration, typical for a web based a
                      '--------------'
 ```
 
+The configuration consists of a Workstation and four servers.  Three of the servers are being used to develop a web based application and the other is an unused spare. Overlapping server groups can be defined 
+
+The server groups in this configuration are:
+* **MyApplication** - contains all servers being used for the web based application development (servers 1 through 3).
+* **Sandpit** - The development sandpit on the workstation only.
+* **AppSvr** - The web application servers, servers 1 and 2.
+* **DB** - The database server, server3.
+* **Unused** - Server4 is a spare server.
+
 **config.yaml**
 ```
 farm:
@@ -83,34 +92,49 @@ farm:
       transport: local
       group:
         - Sandpit
+        - MyApplication
 - server:
       name: server1
       group:
         - AppSvr
+        - MyApplication
 - server:
       name: server2
       group:
         - AppSvr
+        - MyApplication
 - server:
       name: server3
       group:
         - DB
+        - MyApplication
 - server:
       name: server4
+      group:
+        - Unused
 ```
+
+After making changes you will need to reload the configuration file using the ```ParseConfig``` command.  The ```ShowConfig``` command will display the current loaded configuration.  
+
+The configuration contains a couple of additional tags that describe the Farm network configuration.
+* **network** sets the network interface used to connect to a server.  **network** is used when checking if the remote server is available.
+* **transport** sets the transport used to connect to the server.  The default transport is **ssh**.  The **local** transport creates a bash shell on the local server. 
+
+The **network** and **transport** tags can be set globally at the top of the configuration file, or be set individually for a server.  In the example configuration, the default method of connection is via the ssh command over the eth0 interface.  The workstation is configured to use a local bash shell.
+
 ## Kicking the tires
 Now that you have a working installation you can run a few commands.  We have already used a few of them during the installation process.
 
 There are four basic commands for operating with the server farm
 
 **Farm.OnAll** runs a command on all servers in a server group.  To check *nginx* is running you could use 
-> Farm.OnAll -g MyApplication ps -ax | grep nginx
+> Farm.OnAll -g AppSvr ps -ax | grep nginx
 
 **Farm.OnOne** runs a command on one server in a server group.  To connect to *postgres* on the database server you could use 
 > Farm.OnOne -g DB -m SESSION psql
 
 **Farm.ForAll** runs a command on the local server, substituting SERVER in the command with each of the server names in a server group.  This is useful when you want to repeat a command locally for each server in a group.  For example, to copy updated web content to the *nginx* servers you could use 
-> Farm.ForAll -g MyApplication rcp -R https SERVER:/var/www/html
+> Farm.ForAll -g AppSvr rcp -R https SERVER:/var/www/html
 
 **Farm.ForOne** runs a command on the local server, substituting SERVER in the command with one of the server names in a server group.  
 
@@ -128,7 +152,7 @@ rcp ~/Build/nginx.conf SERVER:/etc/nginx
 ssh SERVER sudo service nginx restart
 ```
 you can load a new configuration with the command 
-> Farm.ForAll -g MyApplication -f updateNginxConfig
+> Farm.ForAll -g AppSvr -f updateNginxConfig
 
 Similarly, with:
 ```
@@ -185,7 +209,7 @@ For example, ```Farm.ForAll -l "server1 server2" uptime``` is the equivalent of 
 
 All commands leave the Context environment variables set.  This enables you to chain a sequence of commands together.  For example, you could have refreshed the nginx configuration with:
 ```
-Farm.ForAll -g MyApplication rcp ~/Build/nginx.conf SERVER:/etc/nginx
+Farm.ForAll -g AppSvr rcp ~/Build/nginx.conf SERVER:/etc/nginx
 Farm.OnAll sudo service nginx restart
 ```
 
@@ -194,10 +218,24 @@ There are a few additional commands you can use to work with the Context.
 * ***ShowContext*** Displays the current context variables
 * ***ClearContext*** Unsets the current context variables.
 
-To select from a list of current
+The **Farm.GetActiveServers** and **Farm.SelectActiveServer** commands update the context using only the servers in the list that are currently online.
+
+The full list of context variables are:
+| Context | Purpose |
+| :------ | :------ |
+| SERVER | The selected server. |
+| SERVER_GROUP | The name of the group of servers that have been selected. |
+| SERVER_LIST | The list of servers selected. |
+| TRANSPORT | The default transport |
+| NETWORK | The default network |
+| TIMEOUT | Timeout used when checking if the server is online |
+| FUNCTION | The name of the function that set the context |
+| ACTIVE_SERVERS | The list of currently active servers |
+| ACTIVE_SERVER_COUNT | How many active servers are there |
+| SELECTION_ALGORITHM | Algorithm used to select the server from the ACTIVE_SERVERS list.  Currently only support RANDOM selection. |
 
 ### Extending the CLI
-
+***Farmer*** commands can be used to create additional 
 
 
 These are useful  
