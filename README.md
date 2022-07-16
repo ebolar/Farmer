@@ -69,14 +69,14 @@ The examples below are based around the following configuration.
                      '--------------'
 ```
 
-The configuration consists of a Workstation and four servers.  Three of the servers are being used to develop a web based application and the other is an unused spare. Overlapping server groups can be defined 
+The configuration consists of a Workstation and four servers.  Three of the servers are being used to develop a web based application and the other is an unused spare. 
 
-The server groups in this configuration are:
-* **MyApplication** - contains all servers being used for the web based application development (servers 1 through 3).
+A set of overlapping server groups are defined in this configuration:
+* **MyApplication** - contains all servers being used for the web based application development, being the workstation and servers 1 through 3.
 * **Sandpit** - The development sandpit on the workstation only.
 * **AppSvr** - The web application servers, servers 1 and 2.
 * **DB** - The database server, server3.
-* **Unused** - Server4 is a spare server.
+* **Unused** - The server4 is a spare server.
 
 **config.yaml**
 ```
