@@ -30,8 +30,8 @@ export FARM_CONFIG=$FARM_HOME/config/config.yaml
 4. Execute ```source ~./bashrc``` to load the farm configuration.
 5. You can test that it is working with a few commands.  
 ```
-# Parse and then print out the configuration
-TestConfiguration
+# Print out the configuration
+ShowConfig
 
 # List the names of all servers in the farm
 Farm.ForAll -a echo SERVER
@@ -112,14 +112,13 @@ The previous examples all execute a single command on the remote server.  To exe
 
 For example, with following **updateConfig** script:
 ```
-#!/bin/bash
 # ========================================================
 # updateNginxConfig
 # ========================================================
 # Update the nginx configuration and restart the server
 
 echo -e "${GREEN}=== SERVER ===${NC}"
-rcp ~/Build/nginx.conf SERVER:/etc/nginx/
+rcp ~/Build/nginx.conf SERVER:/etc/nginx
 ssh SERVER sudo service nginx restart
 ```
 you can load a new configuration with the command 
@@ -127,13 +126,10 @@ you can load a new configuration with the command
 
 Similarly, with:
 ```
-#!/bin/bash
 # ========================================================
 # getserverinfo
 # ========================================================
-# V1.0 - bash / ssh based implementation
-#
-# Report the sheduling characteristics for a server
+# Report the characteristics for a server
 #
 
 echo ========================================================
@@ -149,41 +145,62 @@ you can check the configuration of all servers in the farm with the command
 > Farm.OnAll -a -f getServerInfo
 
 ## Getting under the hood
+### Syntax
+All **Farm.xxx** commands have the same syntax
 
+```
+[Context] Farm.xxxx [Switches] [Commands]
 
-
-
-Usage: [Context] Farm.ForOne [Switches] [Commands]
-
-Context:
-  FUNCTION=<function name>
-  SERVER=<server name>
+ Context:
   SERVER_GROUP=<server group name>
   SERVER_LIST=<list of server names>
 
-Switches:
-  -h | -a | -s <server name> | -g <group> | -l <list of servers>
+ Switches:
+  -h | -a | -g <group> | -l <list of servers> | -m COMMAND|SESSION
 
-Commands:
+ Commands:
   <list of commands>
   -f <list of files>
+```
 
-Notes:
-  -h prints this help message
-  -a sets SERVER_GROUP=<farmname> and SERVER_LIST=<all servers>
-  -g sets SERVER_LIST=<groupList>
-  -l sets SERVER_GROUP="" and SERVER_LIST=<list of servers>
-  -s sets SERVER_GROUP="" and SERVER_LIST=<server name>
-  -f read commands from <list of files>
-  NETWORK and TRANSPORT are derived from the configuration
+| Switch | Purpose            | Context            |
+| :----: | :----------------- | :----------------- |
+| -h | Prints the help message. |  |
+| -a | Selects all servers in the farm. | SERVER_GROUP=\<farmname\>, SERVER_LIST=\<all servers\> |
+| -g | Selects all servers in a group. | SERVER_LIST=\<groupList\> |
+| -l | Selects an arbitrary list of servers. | SERVER_GROUP=\"\", SERVER_LIST=\<list of servers\> |
+| -f | Reads commands from \<list of files\> | |
+| -m | Execute a COMMAND, or start an interactive SESSION. | |
 
+### Working with the Context
+You can select which servers to operate on either by using the Switches or through the Context environment variables.
+
+For example, ```Farm.ForAll -l "server1 server2" uptime``` is the equivalent of ```SERVER_LIST="server1 server2" Farm.ForAll uptime```.
+
+All commands leave the Context environment variables set.  This enables you to chain a sequence of commands together.  For example, you could have refreshed the nginx configuration with:
+```
+Farm.ForAll -g MyApplication rcp ~/Build/nginx.conf SERVER:/etc/nginx
+Farm.OnAll sudo service nginx restart
+```
+
+There are a few additional commands you can use to work with the Context.
+* ***SetContext [Switches]*** sets the context variables using the Switches above.
+* ***ShowContext*** Displays the current context variables
+* ***ClearContext*** Unsets the current context variables.
+
+To select from a list of current
+
+### Extending the CLI
+
+
+
+These are useful  
+  
 $FARM_HOME/Shell/Commands contains a few pre-defined commands that show different ways to make use of this software.  Additional commands can be configured here.
 
 ## Customising your environment
 
-### Setting Context
-### Using Farmer Primitives
-### Defining new commands
+## Command reference
 
 ## To Do
 * Nice to be able to run this under Windows.  Currently running this from WSL.
@@ -193,5 +210,7 @@ $FARM_HOME/Shell/Commands contains a few pre-defined commands that show differen
 * ShowGroups() generates a list of groups configured on the farm.
 * The ability to set the remote username for a server in the configuration, or at the command line.
 * Transports for cloud CLI's (eg AWS, Azure, Google).  Should allow you to connect to either a VM or Container as if it is a standalone server.
-
+* No reason to have -s <server>.  You can use -l <server> to achieve the same effect.
+* -A select from Active servers in a group.  Load balancing?
+    
 2. Leverages **standard distributed computing tools** so that you can configure your environment as you need it.  The minimum requirement is ssh access to other members of the server farm, under the local username.  The Networked sharing of resources is used to provide seamless integration for remotely running processes.
