@@ -61,8 +61,12 @@ The examples below assume the following configuration, typical for a web based a
 '-------------'  |   '--------------------'  |   '-----------------'
                  |                           |
                  |   .--------------------.  |
-                 \-> | Application server | -/
-                     '--------------------'
+                 |-> | Application server | -|
+                 |   '--------------------'  
+                 |                           
+                 |   .--------------.  
+                 \-> | Other server | 
+                     '--------------'
 ```
 
 **config.yaml**
@@ -82,15 +86,17 @@ farm:
 - server:
       name: server1
       group:
-        - MyApplication
+        - AppSvr
 - server:
       name: server2
       group:
-        - MyApplication
+        - AppSvr
 - server:
       name: server3
       group:
         - DB
+- server:
+      name: server4
 ```
 ## Kicking the tires
 Now that you have a working installation you can run a few commands.  We have already used a few of them during the installation process.
